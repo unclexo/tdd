@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +21,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::prefix('posts')->controller(PostController::class)->group(function() {
+        Route::get('/create', 'create')->name('posts.create');
+
+        Route::post('/store-simple-form-data', 'storeDataWithoutValidation')->name('posts.store.data.without.validation');
+    });
+});
