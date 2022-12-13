@@ -27,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('posts')->controller(PostController::class)->group(function() {
         Route::get('/create', 'create')->name('posts.create');
 
+        Route::get('/{post}', 'show')->name('posts.show');
+
         Route::post('/store', 'store')->name('posts.store');
     });
 });

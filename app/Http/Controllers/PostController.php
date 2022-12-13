@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -13,6 +14,13 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-        auth()->user()->posts()->create($request->validated());
+        $post = auth()->user()->posts()->create($request->validated());
+
+        return redirect($post->path());
+    }
+
+    public function show(Post $post)
+    {
+        return view('posts.show', compact('post'));
     }
 }
