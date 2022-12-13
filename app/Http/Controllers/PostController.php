@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
@@ -12,8 +11,8 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function storeDataWithoutValidation()
+    public function store(PostRequest $request)
     {
-        Post::create(\request()->all());
+        auth()->user()->posts()->create($request->validated());
     }
 }

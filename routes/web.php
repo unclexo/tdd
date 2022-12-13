@@ -27,6 +27,6 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('posts')->controller(PostController::class)->group(function() {
         Route::get('/create', 'create')->name('posts.create');
 
-        Route::post('/store-simple-form-data', 'storeDataWithoutValidation')->name('posts.store.data.without.validation');
+        Route::post('/store', 'store')->name('posts.store');
     });
 });
