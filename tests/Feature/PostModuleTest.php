@@ -46,4 +46,27 @@ class PostModuleTest extends TestCase
             ->assertSee($post->title)
             ->assertSee($post->description);
     }
+
+    /** @test */
+    public function a_post_requires_valid_data()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $attributes = Post::factory()->raw([
+            'title' => '',
+            'description' => '',
+        ]);
+
+        $this->post(route('posts.store'), $attributes)
+            ->assertSessionHasErrors(['title', 'description']);
+
+
+        $attributes2 = Post::factory()->raw([
+            'title' => 12345,
+            'description' => 'hello',
+        ]);
+
+        $this->post(route('posts.store'), $attributes2)
+            ->assertSessionHasErrors(['title', 'description']);
+    }
 }
