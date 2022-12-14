@@ -15,4 +15,14 @@ class Post extends Model
      * Empty array means all are mass assignable in this case
      */
     protected $guarded = [];
+
+    public function path()
+    {
+        return route('posts.show', $this->id);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

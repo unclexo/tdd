@@ -25,8 +25,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::prefix('posts')->controller(PostController::class)->group(function() {
+        Route::get('/', 'index')->name('posts.index');
+
         Route::get('/create', 'create')->name('posts.create');
 
-        Route::post('/store-simple-form-data', 'storeDataWithoutValidation')->name('posts.store.data.without.validation');
+        Route::get('/{post}', 'show')->name('posts.show');
+
+        Route::post('/store', 'store')->name('posts.store');
+
+        Route::patch('/{post}', 'update')->name('posts.update');
+
+        Route::delete('/{post}', 'destroy')->name('posts.delete');
     });
 });
