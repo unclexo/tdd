@@ -84,4 +84,16 @@ class PostModuleTest extends TestCase
 
         $this->assertDatabaseHas('posts', $attributes);
     }
+
+    /** @test */
+    public function a_user_can_delete_a_post()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        $post = Post::factory()->create(['user_id' => $user->id]);
+
+        $this->delete($post->path())->assertRedirect(route('posts.index'));
+
+        $this->assertDatabaseMissing('posts', $post->only('id'));
+    }
 }
