@@ -30,5 +30,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{post}', 'show')->name('posts.show');
 
         Route::post('/store', 'store')->name('posts.store');
+
+        Route::patch('/{post}', 'update')->name('posts.update');
     });
 });

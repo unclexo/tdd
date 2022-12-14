@@ -25,7 +25,7 @@ class PostRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'description' => ['required', 'min:10'],
+            'description' => ['sometimes', 'required', 'min:5'],
         ];
     }
 }

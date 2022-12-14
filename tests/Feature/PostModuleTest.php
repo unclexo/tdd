@@ -63,10 +63,25 @@ class PostModuleTest extends TestCase
 
         $attributes2 = Post::factory()->raw([
             'title' => 12345,
-            'description' => 'hello',
+            'description' => 'hi',
         ]);
 
         $this->post(route('posts.store'), $attributes2)
             ->assertSessionHasErrors(['title', 'description']);
+    }
+
+    /** @test */
+    public function a_user_can_update_a_post()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        $post = Post::factory()->create(['user_id' => $user->id]);
+
+        $this->patch(
+            $post->path(),
+            $attributes = ['title' => 'updated']
+        )->assertRedirect($post->path());
+
+        $this->assertDatabaseHas('posts', $attributes);
     }
 }

@@ -23,4 +23,11 @@ class PostController extends Controller
     {
         return view('posts.show', compact('post'));
     }
+
+    public function update(PostRequest $request, Post $post)
+    {
+        $post->update($request->validated());
+
+        return redirect($post->path());
+    }
 }
