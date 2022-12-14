@@ -22,6 +22,19 @@ class PostModuleTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_create_a_post_2()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        $this->get(route('posts.create'))->assertStatus(200);
+
+        $this->followingRedirects()
+            ->post(route('posts.store'), $attributes = Post::factory()->raw(['user_id' => $user->id]))
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description']);
+    }
+
+    /** @test */
     public function users_can_view_their_own_posts()
     {
         $this->withoutExceptionHandling();
