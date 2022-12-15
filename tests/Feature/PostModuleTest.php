@@ -96,4 +96,20 @@ class PostModuleTest extends TestCase
 
         $this->assertDatabaseMissing('posts', $post->only('id'));
     }
+
+    /** @test */
+    public function guest_users_can_not_manage_posts()
+    {
+        $post = Post::factory()->create();
+
+        $this->get(route('posts.index'))->assertRedirect(route('login'));
+
+        $this->get($post->path())->assertRedirect(route('login'));
+
+        $this->get(route('posts.create'))->assertRedirect(route('login'));
+
+        $this->get(route('posts.edit', $post->id))->assertRedirect(route('login'));
+
+        $this->post(route('posts.store'), $post->toArray())->assertRedirect(route('login'));
+    }
 }
