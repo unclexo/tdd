@@ -26,6 +26,8 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post)
     {
+        $this->authorize('update', $post); // Check out Gate authorization api
+
         $post->update($request->validated());
 
         return redirect($post->path());
@@ -33,6 +35,8 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+        $this->authorize('update', $post);
+
         $post->delete();
 
         return redirect()->route('posts.index');
