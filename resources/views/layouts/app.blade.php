@@ -30,7 +30,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        @if(\Illuminate\Support\Facades\Route::has('posts.index'))
+                            <a href="{{ route('posts.index') }}">{{ __('Posts') }}</a>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->

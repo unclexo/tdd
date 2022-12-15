@@ -33,6 +33,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/store', 'store')->name('posts.store');
 
+        Route::get('/{post}/edit', 'edit')->name('posts.edit');
+
         Route::patch('/{post}', 'update')->name('posts.update');
 
         Route::delete('/{post}', 'destroy')->name('posts.delete');
