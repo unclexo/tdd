@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MediaUploaderController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,5 +39,9 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/{post}', 'update')->name('posts.update');
 
         Route::delete('/{post}', 'destroy')->name('posts.delete');
+    });
+
+    Route::prefix('media')->controller(MediaUploaderController::class)->group(function() {
+        Route::post('/upload', 'upload')->name('upload.common');
     });
 });
