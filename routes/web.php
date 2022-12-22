@@ -43,5 +43,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('media')->controller(MediaUploaderController::class)->group(function() {
         Route::post('/upload', 'upload')->name('upload.common');
+
+        Route::post('/upload/renamed', 'rename')->name('upload.renamed');
     });
 });

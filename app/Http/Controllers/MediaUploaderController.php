@@ -12,4 +12,13 @@ class MediaUploaderController extends Controller
 
         // Use $path to get the image path
     }
+
+    public function rename()
+    {
+        $newImageName = 'you-name-it.jpg';
+
+        $path = \request()->file('image')->storeAs('renamed', $newImageName, 'local');
+
+        return ['path' => $path];
+    }
 }
