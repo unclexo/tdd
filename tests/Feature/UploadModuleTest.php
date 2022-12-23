@@ -23,6 +23,7 @@ class UploadModuleTest extends TestCase
             'image' => $file = UploadedFile::fake()->image('image-name.jpg'),
         ]);
 
+        // points to "app/public/common" dir
         Storage::disk('public')->assertExists('common/' . $file->hashName());
     }
 
@@ -37,9 +38,31 @@ class UploadModuleTest extends TestCase
             'image' => $file = UploadedFile::fake()->image($originalName = 'image-name.jpg'),
         ]);
 
+        // points to "app/renamed" dir
         Storage::disk('local')
             ->assertMissing('renamed/' . $originalName)
             ->assertMissing('renamed/' . $file->hashName())
             ->assertExists($response->json('path')); // Note this line
+    }
+
+    /** @test */
+    public function it_can_upload_valid_image()
+    {
+        // Uncomment this line to check errors
+        // $this->withoutExceptionHandling();
+
+        $this->actingAs(User::factory()->create());
+
+        Storage::fake('public');
+
+        $this->post(route('upload.validation'), [
+            'image' => UploadedFile::fake()->create('video-filename.mp4', 200, 'video/mp4'),
+        ])->assertSessionHasErrors(['image']);
+
+        $response = $this->post(route('upload.validation'), [
+            'image' => UploadedFile::fake()->create('image-name.jpg', 100, 'image/jpeg'),
+        ]);
+
+        Storage::disk('public')->assertExists($response->json('path'));
     }
 }

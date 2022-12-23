@@ -21,4 +21,17 @@ class MediaUploaderController extends Controller
 
         return ['path' => $path];
     }
+
+    public function validateUpload()
+    {
+        \request()->validate([
+            'image' => ['required', 'mimes:jpg,png', 'size:100']
+        ]);
+
+        $newImageName = 'you-name-it.jpg';
+
+        $path = \request()->file('image')->storeAs('validated', $newImageName, 'public');
+
+        return ['path' => $path];
+    }
 }
