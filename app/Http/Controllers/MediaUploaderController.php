@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UploadMultipleFilesRequest;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 class MediaUploaderController extends Controller
 {
@@ -33,5 +35,23 @@ class MediaUploaderController extends Controller
         $path = \request()->file('image')->storeAs('validated', $newImageName, 'public');
 
         return ['path' => $path];
+    }
+
+    public function uploadMultipleFiles(UploadMultipleFilesRequest $request)
+    {
+        $paths = [];
+
+        foreach (\request()->file('files') as $key => $file) {
+            if ($file instanceof UploadedFile) {
+                $newFilename = Str::random(16) . '.' . $file->getClientOriginalExtension(); // do not believe it
+
+                // points to "app/public/validated" dir
+                $path = $file->storeAs('validated', $newFilename, 'public');
+
+                $paths[$key] = $path;
+            }
+        }
+
+        return $paths;
     }
 }

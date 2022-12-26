@@ -65,4 +65,23 @@ class UploadModuleTest extends TestCase
 
         Storage::disk('public')->assertExists($response->json('path'));
     }
+
+    /** @test */
+    public function it_can_upload_multiple_files()
+    {
+        $this->actingAs(User::factory()->create());
+
+        Storage::fake('public');
+
+        $response = $this->post(route('upload.multiple'), [
+            'files' => [
+                UploadedFile::fake()->create('image-filename.jpg', 200, 'image/jpeg'),
+                UploadedFile::fake()->create('video-filename.mp4', 1024, 'video/mp4'),
+                UploadedFile::fake()->create('pdf-filename.pdf', 200, 'application/pdf'),
+                // UploadedFile::fake()->create('some.mp3', 500, 'audio/mp3'),
+            ],
+        ]);
+
+        Storage::disk('public')->assertExists($response->json());
+    }
 }

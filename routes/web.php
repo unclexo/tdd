@@ -47,5 +47,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/upload/renamed', 'rename')->name('upload.renamed');
 
         Route::post('/upload/validation', 'validateUpload')->name('upload.validation');
+
+        Route::post('/upload/multiple-files', 'uploadMultipleFiles')->name('upload.multiple');
     });
 });
