@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadMultipleFilesRequest;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class MediaUploaderController extends Controller
 {
@@ -53,5 +55,20 @@ class MediaUploaderController extends Controller
         }
 
         return $paths;
+    }
+
+    public function resize()
+    {
+        \request()->validate([
+            'image' => ['required', 'image']
+        ]);
+
+        $newImageName = 'new-image-name.jpg';
+
+        $path = \request()->file('image')->storeAs('resize', $newImageName, 'public');
+
+        Image::make(Storage::disk('public')->path($path))->resize(300, 200)->save();
+
+        return ['path' => $path];
     }
 }

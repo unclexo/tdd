@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Tests\TestCase;
 
 class UploadModuleTest extends TestCase
@@ -83,5 +84,23 @@ class UploadModuleTest extends TestCase
         ]);
 
         Storage::disk('public')->assertExists($response->json());
+    }
+
+    /** @test */
+    public function it_can_resize_uploaded_image()
+    {
+        $this->actingAs(User::factory()->create());
+
+        Storage::fake('public');
+
+        $response = $this->post(route('upload.resize'), [
+            'image' => $file = UploadedFile::fake()->image('image-name.jpg', 500, 500),
+        ]);
+
+        Storage::disk('public')->assertExists($response->json('path'));
+
+        $image = Image::make(Storage::disk('public')->path($response->json('path')));
+        $this->assertEquals(300, $image->width());
+        $this->assertEquals(200, $image->height());
     }
 }
