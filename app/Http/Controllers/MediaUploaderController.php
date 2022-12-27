@@ -71,4 +71,28 @@ class MediaUploaderController extends Controller
 
         return ['path' => $path];
     }
+
+    /**
+     * Not this method is coupled with download() method
+     * because it needs a file for downloading
+     *
+     * @return array
+     */
+    public function uploadPrivate()
+    {
+        $privateFilename = 'private-file.pdf';
+
+        $path = \request()->file('file')->storeAs('private', $privateFilename, 'local');
+
+        return ['path' => $path];
+    }
+
+    public function download($filename)
+    {
+        // Retrieve the private file. Based on user subscription or role, for example.
+
+        $privateFilepath = Storage::disk('local')->path('private/private-file.pdf');
+
+        return response()->download($privateFilepath, $filename);
+    }
 }

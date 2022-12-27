@@ -103,4 +103,25 @@ class UploadModuleTest extends TestCase
         $this->assertEquals(300, $image->width());
         $this->assertEquals(200, $image->height());
     }
+
+    /** @test */
+    public function it_can_download_a_private_file()
+    {
+        $this->actingAs(User::factory()->create());
+
+        Storage::fake('local');
+
+        $response1 = $this->post(route('upload.private'), [
+            'file' => $file = UploadedFile::fake()->create('private-file.pdf', 1024, 'application/pdf'),
+        ]);
+
+        Storage::disk('local')->assertExists($response1->json('path'));
+
+        // This name will determine the filename that is seen by the user downloading the file
+        $filename = 'download-private-file.pdf';
+
+        $response2 = $this->get(route('upload.download', $filename));
+        $response2->assertStatus(200);
+        $response2->assertDownload($filename);
+    }
 }

@@ -51,5 +51,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/upload/multiple-files', 'uploadMultipleFiles')->name('upload.multiple');
 
         Route::post('/upload/resize', 'resize')->name('upload.resize');
+
+        Route::post('/upload/private', 'uploadPrivate')->name('upload.private');
+
+        Route::get('/upload/download/{filename}', 'download')->name('upload.download');
     });
 });
