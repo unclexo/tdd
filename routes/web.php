@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MediaUploaderController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,5 +39,21 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/{post}', 'update')->name('posts.update');
 
         Route::delete('/{post}', 'destroy')->name('posts.delete');
+    });
+
+    Route::prefix('media')->controller(MediaUploaderController::class)->group(function() {
+        Route::post('/upload', 'upload')->name('upload.common');
+
+        Route::post('/upload/renamed', 'rename')->name('upload.renamed');
+
+        Route::post('/upload/validation', 'validateUpload')->name('upload.validation');
+
+        Route::post('/upload/multiple-files', 'uploadMultipleFiles')->name('upload.multiple');
+
+        Route::post('/upload/resize', 'resize')->name('upload.resize');
+
+        Route::post('/upload/private', 'uploadPrivate')->name('upload.private');
+
+        Route::get('/upload/download/{filename}', 'download')->name('upload.download');
     });
 });
