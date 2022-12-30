@@ -1,66 +1,52 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Test Your Laravel Application
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A [Laravel](https://laravel.com/) app that has a number of implemented test cases. Do you love to TDD your Laravel 
+application or don't know how to unit test your Laravel application? This repo will help you there. Get started with 
+Test Driven Development.
 
-## About Laravel
+Happy TDD
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### TDD in few words
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+In Test-Driven Development, you've two rules:
+- Write new code only if you first have a failing automated test.
+- Eliminate duplication.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The two rules imply an order to the tasks of programming:
 
-## Learning Laravel
+1. **Red** - write a little test that doesn’t work, perhaps doesn’t even compile at first
+2. **Green** - make the test work quickly, committing whatever sins necessary in the
+process
+3. **Refactor** - eliminate all the duplication created in just getting the test to work
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Red** / **Green** / **Refactor** - is called the TDD mantra.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+This is from [Kent Beck's](https://en.wikipedia.org/wiki/Kent_Beck) [TDD by example](https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Where to start
 
-## Laravel Sponsors
+Where do I start? Don't worry! It happens. When you're not sure where to start, try to figure out what module or class 
+or function you're going to deal with. If you get one, break it down into a set of tasks. Then pick a task and go with 
+that.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+If it does not work try to fake a list of tasks. Even if this one does not work too, take a walk and repeat.
 
-### Premium Partners
+### Testing Form Submission
+##### How to
+- [Test a simple form submission](https://github.com/unclexo/test-laravel-app/commit/b97d903e491156a4cdb0cefd379639310ff6a22f)
+- [Test creating a blog post](https://github.com/unclexo/test-laravel-app/commit/f4f61092115518780997cc96ba959486479a19ad#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR12)
+- [Test displaying a blog post](https://github.com/unclexo/test-laravel-app/commit/cc242030ff7499cf2c6ae7d0ca78f292b206da86#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR22)
+- [Test redirection after creating a post](https://github.com/unclexo/test-laravel-app/commit/01ea64150a94e8a0c193febaa02c225b6020d7c5#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR22)
+- [Test validating a simple form](https://github.com/unclexo/test-laravel-app/commit/ac801e2ddb57b74d069e5ae0ad9bad558ebc4277#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR48)
+- [Test updating a blog post](https://github.com/unclexo/test-laravel-app/commit/b142dfc89ed5dcdd2cc14f7b38a0f2401808050b#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR71)
+- [Test deleting a blog post](https://github.com/unclexo/test-laravel-app/commit/4e8286c0bc265a3969c8a193491dc8fcc51a281b#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR86)
+- [Test unauthenticated users cannot manage posts](https://github.com/unclexo/test-laravel-app/commit/b938a750deb49e954b36b30590a3e07f04dde9f9#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR98)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Testing File Upload
+##### How to
+- [Test a simple image upload](https://github.com/unclexo/test-laravel-app/commit/e08dbd08777ffda7969caa57936e36f36f1f9849)
+- [Test renaming an uploaded image](https://github.com/unclexo/test-laravel-app/commit/adde09542d199625baa10ce3879e4b904efb0fda#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR27)
+- [Test validating an uploaded image](https://github.com/unclexo/test-laravel-app/commit/05286dd6301039fa5e3a5bebd25154d6454b2868#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR46)
+- [Test uploading multiple files with validation](https://github.com/unclexo/test-laravel-app/commit/a2c9d24f5e25d9c7f7eafb2c4e43a163802387b8#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR67)
+- [Test resizing uploaded image](https://github.com/unclexo/test-laravel-app/commit/fe489a5ed36f5b906ed46f65dc84307ceec96633#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR87)
+- [Test downloading a private file](https://github.com/unclexo/test-laravel-app/commit/15eb9df78d863dca6a4ceeb0d98abd94eee4a4dd#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR105)
