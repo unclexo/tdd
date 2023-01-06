@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaUploaderController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostPublishController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,5 +56,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/upload/private', 'uploadPrivate')->name('upload.private');
 
         Route::get('/upload/download/{filename}', 'download')->name('upload.download');
+    });
+
+    Route::prefix('mailable')->group(function() {
+        Route::get('template/{id}', [PostPublishController::class, 'previewMailTemplate'])
+            ->name('mailable.preview');
     });
 });

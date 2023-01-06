@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -13,14 +14,16 @@ class PostPublished extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public Post $post;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Post $post)
     {
-        //
+        $this->post = $post;
     }
 
     /**
@@ -44,6 +47,9 @@ class PostPublished extends Mailable
     {
         return new Content(
             markdown: 'emails.posts.published',
+            with: [
+                'url' => url("/posts/{$this->post->id}"),
+            ],
         );
     }
 

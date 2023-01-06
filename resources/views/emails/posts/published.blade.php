@@ -1,10 +1,10 @@
 <x-mail::message>
-# Introduction
+# Post Published
 
-The body of your message.
+Your post has been published on Medium
 
-<x-mail::button :url="''">
-Button Text
+<x-mail::button :url="$url">
+View Post
 </x-mail::button>
 
 Thanks,<br>
