@@ -6,6 +6,7 @@ use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -48,6 +49,9 @@ class OrderShipped extends Mailable
      */
     public function attachments()
     {
-        return [];
+        return [
+            Attachment::fromPath(storage_path('app/public/some.pdf')),
+            Attachment::fromStorageDisk('public', 'other.pdf'),
+        ];
     }
 }

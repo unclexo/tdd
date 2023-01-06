@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Mail\Mailables\Attachment;
 use Tests\TestCase;
 
 class MailTest extends TestCase
@@ -107,5 +108,18 @@ class MailTest extends TestCase
         $mailable->assertHasMetadata('order_id', $order->id);
 
         $mailable->assertSeeInHtml('Order Shipped');
+    }
+
+    /** @test */
+    public function mailable_can_have_attachments()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        $order = Order::factory()->create(['user_id' => $user->id]);
+
+        $mailable = new OrderShipped($order);
+
+        $mailable->assertHasAttachment(Attachment::fromPath(storage_path('app/public/some.pdf')));
+        $mailable->assertHasAttachment(Attachment::fromStorageDisk('public', 'other.pdf'));
     }
 }
