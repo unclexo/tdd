@@ -39,4 +39,34 @@ class MailTest extends TestCase
         $this->get(route('mailable.preview', $post->id))
             ->assertStatus(200);
     }
+
+    /** @test */
+    public function mailable_has_valid_content()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        $post = Post::factory()->create(['user_id' => $user->id]);
+
+        $mailable = new PostPublished($post);
+
+        $mailable->assertFrom('medium@example.com');
+
+        $mailable->assertTo('unclexo@example.com');
+
+        $mailable->assertHasBcc('ria@example.com');
+
+        $mailable->assertHasReplyTo('taylor@example.com');
+
+        $mailable->assertHasSubject('Post Published');
+
+        $mailable->assertHasTag('design-patterns');
+
+        $mailable->assertHasMetadata('post_id', $post->id);
+
+        $mailable->assertSeeInHtml('Post Published');
+
+        $mailable->assertSeeInOrderInHtml(['View Post', 'Thanks']);
+
+        $mailable->assertSeeInOrderInText(['View Post', 'Thanks']);
+    }
 }
