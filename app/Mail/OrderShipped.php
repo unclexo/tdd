@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -13,26 +14,16 @@ class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public Order $order;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Order $order)
     {
-        //
-    }
-
-    /**
-     * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
-     */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'Order Shipped',
-        );
+        $this->order = $order;
     }
 
     /**
@@ -44,6 +35,9 @@ class OrderShipped extends Mailable
     {
         return new Content(
             markdown: 'emails.orders.shipped',
+            with: [
+                'url' => url("/orders/{$this->order->id}"),
+            ],
         );
     }
 
