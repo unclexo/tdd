@@ -122,4 +122,18 @@ class MailTest extends TestCase
         $mailable->assertHasAttachment(Attachment::fromPath(storage_path('app/public/some.pdf')));
         $mailable->assertHasAttachment(Attachment::fromStorageDisk('public', 'other.pdf'));
     }
+
+    /** @test */
+    public function mailable_can_have_attachments_at_runtime()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        $order = Order::factory()->create(['user_id' => $user->id]);
+
+        $mailable = new OrderShipped($order);
+
+        $mailable->attachFromStorageDisk('public', 'your-order.pdf');
+
+        $mailable->assertHasAttachmentFromStorageDisk('public', 'your-order.pdf');
+    }
 }
