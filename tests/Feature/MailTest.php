@@ -11,6 +11,7 @@ use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Mail\Mailables\Attachment;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class MailTest extends TestCase
@@ -135,5 +136,22 @@ class MailTest extends TestCase
         $mailable->attachFromStorageDisk('public', 'your-order.pdf');
 
         $mailable->assertHasAttachmentFromStorageDisk('public', 'your-order.pdf');
+    }
+
+    /** @test */
+    public function email_api_can_be_instructed_to_send_a_mailable()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Mail::fake();
+
+        Mail::assertNotSent(OrderShipped::class);
+
+        $this->post(route(
+            'order.shipped.basic',
+            Order::factory()->create(['user_id' => $user->id])
+        ));
+
+        Mail::assertSent(OrderShipped::class);
     }
 }
