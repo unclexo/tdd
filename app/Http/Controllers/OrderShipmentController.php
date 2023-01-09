@@ -17,4 +17,18 @@ class OrderShipmentController extends Controller
 
         return ['message' => 'Your order has been shipped.'];
     }
+
+    public function shipOrderAdvanced(Order $order)
+    {
+        $order->status = 'shipped';
+        $order->save();
+
+        $mailable = (new OrderShipped($order))
+            ->onConnection('redis')
+            ->onQueue('order_shipment');
+
+        Mail::to(auth()->user())->queue($mailable);
+
+        return ['message' => 'Your order has been shipped.'];
+    }
 }

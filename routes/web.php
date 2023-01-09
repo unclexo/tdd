@@ -65,5 +65,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('orders/{order}/shipped/basic', [OrderShipmentController::class, 'shipOrderBasic'])
             ->name('order.shipped.basic');
+
+        Route::post('orders/{order}/shipped/advanced', [OrderShipmentController::class, 'shipOrderAdvanced'])
+            ->name('order.shipped.advanced');
     });
 });

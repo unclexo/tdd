@@ -154,4 +154,21 @@ class MailTest extends TestCase
 
         Mail::assertSent(OrderShipped::class);
     }
+
+    /** @test */
+    public function queue_api_can_be_instructed_to_queue_a_deliverable_mailable()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Mail::fake();
+
+        Mail::assertNotQueued(OrderShipped::class);
+
+        $this->post(route(
+            'order.shipped.advanced',
+            Order::factory()->create(['user_id' => $user->id])
+        ));
+
+        Mail::assertQueued(OrderShipped::class);
+    }
 }
