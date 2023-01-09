@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaUploaderController;
+use App\Http\Controllers\OrderShipmentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostPublishController;
 use Illuminate\Support\Facades\Route;
@@ -61,5 +62,11 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('mailable')->group(function() {
         Route::get('template/{id}', [PostPublishController::class, 'previewMailTemplate'])
             ->name('mailable.preview');
+
+        Route::post('orders/{order}/shipped/basic', [OrderShipmentController::class, 'shipOrderBasic'])
+            ->name('order.shipped.basic');
+
+        Route::post('orders/{order}/shipped/advanced', [OrderShipmentController::class, 'shipOrderAdvanced'])
+            ->name('order.shipped.advanced');
     });
 });

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('shipper_id');
             $table->string('name');
             $table->unsignedDecimal('price');
+            $table->enum('status', ['pending', 'processing', 'shipped', 'cancelled', 'completed'])
+                ->default('pending');
             $table->timestamps();
         });
     }

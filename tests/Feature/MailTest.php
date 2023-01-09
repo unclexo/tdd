@@ -11,6 +11,7 @@ use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Mail\Mailables\Attachment;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class MailTest extends TestCase
@@ -135,5 +136,60 @@ class MailTest extends TestCase
         $mailable->attachFromStorageDisk('public', 'your-order.pdf');
 
         $mailable->assertHasAttachmentFromStorageDisk('public', 'your-order.pdf');
+    }
+
+    /** @test */
+    public function email_api_can_be_instructed_to_send_a_mailable()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Mail::fake();
+
+        Mail::assertNotSent(OrderShipped::class);
+
+        $this->post(route(
+            'order.shipped.basic',
+            Order::factory()->create(['user_id' => $user->id])
+        ));
+
+        Mail::assertSent(OrderShipped::class);
+    }
+
+    /** @test */
+    public function queue_api_can_be_instructed_to_queue_a_deliverable_mailable()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Mail::fake();
+
+        Mail::assertNotQueued(OrderShipped::class);
+
+        $this->post(route(
+            'order.shipped.advanced',
+            Order::factory()->create(['user_id' => $user->id])
+        ));
+
+        Mail::assertQueued(OrderShipped::class);
+    }
+
+    /** @test */
+    public function mailable_can_be_sent_to_multiple_users()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Mail::fake();
+
+        Mail::assertNotQueued(OrderShipped::class);
+
+        $this->post(route(
+            'order.shipped.advanced',
+            Order::factory()->create(['user_id' => $user->id])
+        ));
+
+        Mail::assertQueued(OrderShipped::class, function ($mail) use ($user) {
+            return $mail->hasTo($user->email) &&
+                $mail->hasCc($user->ccEmails()[0]) &&
+                $mail->hasBcc($user->bccEmails()[1]);
+        });
     }
 }
