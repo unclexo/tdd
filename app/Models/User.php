@@ -46,4 +46,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    public function ccEmails()
+    {
+        // Apply logic for getting cc emails
+
+        return [
+            'test_cc1@example.com',
+            'test_cc2@example.com',
+        ];
+    }
+
+    public function bccEmails()
+    {
+        // Apply logic for getting cc emails
+
+        return [
+            'test_bcc1@example.com',
+            'test_bcc2@example.com',
+        ];
+    }
 }

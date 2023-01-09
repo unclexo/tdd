@@ -171,4 +171,25 @@ class MailTest extends TestCase
 
         Mail::assertQueued(OrderShipped::class);
     }
+
+    /** @test */
+    public function mailable_can_be_sent_to_multiple_users()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Mail::fake();
+
+        Mail::assertNotQueued(OrderShipped::class);
+
+        $this->post(route(
+            'order.shipped.advanced',
+            Order::factory()->create(['user_id' => $user->id])
+        ));
+
+        Mail::assertQueued(OrderShipped::class, function ($mail) use ($user) {
+            return $mail->hasTo($user->email) &&
+                $mail->hasCc($user->ccEmails()[0]) &&
+                $mail->hasBcc($user->bccEmails()[1]);
+        });
+    }
 }
