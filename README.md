@@ -1,8 +1,8 @@
 ## Test Your Laravel Application
 
-A [Laravel](https://laravel.com/) app that has a number of implemented test cases. Do you love to TDD your Laravel 
-application or don't know how to unit test your Laravel application? This repo will help you there. Get started with 
-Test Driven Development.
+The Laravel app has a number of implemented feature test cases that may help you understand how to test which 
+feature of your Laravel app. If you love to TDD your Laravel application or don't know how then this repo will help 
+you there. So, get started with Test Driven Development.
 
 Happy TDD
 
@@ -34,19 +34,36 @@ If it does not work try to fake a list of tasks. Even if this one does not work 
 ### Testing Form Submission
 ##### How to
 - [Test a simple form submission](https://github.com/unclexo/test-laravel-app/commit/b97d903e491156a4cdb0cefd379639310ff6a22f)
-- [Test creating a blog post](https://github.com/unclexo/test-laravel-app/commit/f4f61092115518780997cc96ba959486479a19ad#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR12)
-- [Test displaying a blog post](https://github.com/unclexo/test-laravel-app/commit/cc242030ff7499cf2c6ae7d0ca78f292b206da86#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR22)
-- [Test redirection after creating a post](https://github.com/unclexo/test-laravel-app/commit/01ea64150a94e8a0c193febaa02c225b6020d7c5#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR22)
-- [Test validating a simple form](https://github.com/unclexo/test-laravel-app/commit/ac801e2ddb57b74d069e5ae0ad9bad558ebc4277#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR48)
-- [Test updating a blog post](https://github.com/unclexo/test-laravel-app/commit/b142dfc89ed5dcdd2cc14f7b38a0f2401808050b#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR71)
-- [Test deleting a blog post](https://github.com/unclexo/test-laravel-app/commit/4e8286c0bc265a3969c8a193491dc8fcc51a281b#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR86)
-- [Test unauthenticated users cannot manage posts](https://github.com/unclexo/test-laravel-app/commit/b938a750deb49e954b36b30590a3e07f04dde9f9#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR98)
+- [Test creating a blog post](https://github.com/unclexo/test-laravel-app/commit/f4f61092115518780997cc96ba959486479a19ad#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR15)
+- [Test displaying a blog post](https://github.com/unclexo/test-laravel-app/commit/cc242030ff7499cf2c6ae7d0ca78f292b206da86#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR25)
+- [Test redirection after creating a post](https://github.com/unclexo/test-laravel-app/commit/01ea64150a94e8a0c193febaa02c225b6020d7c5#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR25)
+- [Test validating a simple form](https://github.com/unclexo/test-laravel-app/commit/ac801e2ddb57b74d069e5ae0ad9bad558ebc4277#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR51)
+- [Test updating a blog post](https://github.com/unclexo/test-laravel-app/commit/b142dfc89ed5dcdd2cc14f7b38a0f2401808050b#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR74)
+- [Test deleting a blog post](https://github.com/unclexo/test-laravel-app/commit/4e8286c0bc265a3969c8a193491dc8fcc51a281b#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR89)
+- [Test unauthenticated users cannot manage posts](https://github.com/unclexo/test-laravel-app/commit/b938a750deb49e954b36b30590a3e07f04dde9f9#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR101)
 
 ### Testing File Upload
 ##### How to
 - [Test a simple image upload](https://github.com/unclexo/test-laravel-app/commit/e08dbd08777ffda7969caa57936e36f36f1f9849)
-- [Test renaming an uploaded image](https://github.com/unclexo/test-laravel-app/commit/adde09542d199625baa10ce3879e4b904efb0fda#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR27)
-- [Test validating an uploaded image](https://github.com/unclexo/test-laravel-app/commit/05286dd6301039fa5e3a5bebd25154d6454b2868#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR46)
-- [Test uploading multiple files with validation](https://github.com/unclexo/test-laravel-app/commit/a2c9d24f5e25d9c7f7eafb2c4e43a163802387b8#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR67)
-- [Test resizing uploaded image](https://github.com/unclexo/test-laravel-app/commit/fe489a5ed36f5b906ed46f65dc84307ceec96633#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR87)
-- [Test downloading a private file](https://github.com/unclexo/test-laravel-app/commit/15eb9df78d863dca6a4ceeb0d98abd94eee4a4dd#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR105)
+- [Test renaming an uploaded image](https://github.com/unclexo/test-laravel-app/commit/adde09542d199625baa10ce3879e4b904efb0fda#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR30)
+- [Test validating an uploaded image](https://github.com/unclexo/test-laravel-app/commit/05286dd6301039fa5e3a5bebd25154d6454b2868#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR49)
+- [Test uploading multiple files with validation](https://github.com/unclexo/test-laravel-app/commit/a2c9d24f5e25d9c7f7eafb2c4e43a163802387b8#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR70)
+- [Test resizing uploaded image](https://github.com/unclexo/test-laravel-app/commit/fe489a5ed36f5b906ed46f65dc84307ceec96633#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR90)
+- [Test downloading a private file](https://github.com/unclexo/test-laravel-app/commit/15eb9df78d863dca6a4ceeb0d98abd94eee4a4dd#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR108)
+
+### Testing Sending Email
+#### What to test
+
+What to test while sending an email? Well, you don't need to test how to send emails under the hood. Because that's the 
+job of Laravel email API, not yours. So, test Laravel's email API can be instructed to send emails.
+
+#### How to
+- [Test mailables are available](https://github.com/unclexo/test-laravel-app/commit/fecdf9d594ee690ffd84c07454043cd5e2a440eb#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR15)
+- [Test previewing email template](https://github.com/unclexo/test-laravel-app/commit/13e5edd7064353cdb8236f9373b184838efb4f93#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR33)
+- [Test mailable has valid content](https://github.com/unclexo/test-laravel-app/commit/9693f2c6e2922838b58a4e524342d47008e626f9#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR44)
+- [Test setting content to mailable at runtime](https://github.com/unclexo/test-laravel-app/commit/7e4852682df3c7246958e9b0a29a12729dc12106#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR76)
+- [Test mailable can have attachments](https://github.com/unclexo/test-laravel-app/commit/e80c698e85fa3f957f4d41b1d52791eaf96edef8#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR114)
+- [Test mailable can have attachments at runtime](https://github.com/unclexo/test-laravel-app/commit/4a3873bc769981450fbd91367b9221f0ef4201fe#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR127)
+- [Test sending email](https://github.com/unclexo/test-laravel-app/commit/e7bee040b831c8e847586b1aecd2a97c735d934a#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR142)
+- [Test sending email via queue](https://github.com/unclexo/test-laravel-app/commit/95447528f3aea5a3fea2a6313c88e725cf5ec311#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR159)
+- [Test sending email to bulk users](https://github.com/unclexo/test-laravel-app/commit/05017a81ada5f2a596f206b6d02570e8a7539982#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR176)
