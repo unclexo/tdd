@@ -73,5 +73,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('orders')->group(function() {
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
+
+        Route::patch('/{order}', [OrderController::class, 'update'])->name('orders.update');
     });
 });

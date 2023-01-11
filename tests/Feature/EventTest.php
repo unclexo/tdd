@@ -8,6 +8,7 @@ use App\Events\OrderUpdatedEvent;
 use App\Listeners\OrderCreationListener;
 use App\Listeners\OrderDeletionListener;
 use App\Listeners\OrderUpdateListener;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -55,5 +56,22 @@ class EventTest extends TestCase
         ]);
 
         Event::assertDispatched(OrderCreatedEvent::class);
+    }
+
+    /** @test */
+    public function triggering_an_event_after_updating_orders()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Event::fake();
+
+        Event::assertNotDispatched(OrderUpdatedEvent::class);
+
+        $this->patch(route('orders.update', Order::factory()->create()), [
+            'name' => 'changed',
+            'status' => 'shipped',
+        ]);
+
+        Event::assertDispatched(OrderUpdatedEvent::class);
     }
 }
