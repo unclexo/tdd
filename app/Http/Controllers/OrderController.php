@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\OrderCreatedEvent;
+use App\Events\OrderDeletedEvent;
 use App\Events\OrderUpdatedEvent;
 use App\Models\Order;
 use Illuminate\Validation\Rule;
@@ -34,5 +35,12 @@ class OrderController extends Controller
         $order->update($attributes);
 
         OrderUpdatedEvent::dispatch($order);
+    }
+
+    public function destroy(Order $order)
+    {
+        $order->delete();
+
+        OrderDeletedEvent::dispatch($order);
     }
 }

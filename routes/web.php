@@ -75,5 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
 
         Route::patch('/{order}', [OrderController::class, 'update'])->name('orders.update');
+
+        Route::delete('/{order}', [OrderController::class, 'destroy'])->name('orders.delete');
     });
 });

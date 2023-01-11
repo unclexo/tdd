@@ -74,4 +74,18 @@ class EventTest extends TestCase
 
         Event::assertDispatched(OrderUpdatedEvent::class);
     }
+
+    /** @test */
+    public function triggering_an_event_after_deleting_orders()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Event::fake();
+
+        Event::assertNotDispatched(OrderDeletedEvent::class);
+
+        $this->delete(route('orders.delete', Order::factory()->create()));
+
+        Event::assertDispatched(OrderDeletedEvent::class);
+    }
 }
