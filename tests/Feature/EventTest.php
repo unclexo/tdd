@@ -8,6 +8,7 @@ use App\Events\OrderUpdatedEvent;
 use App\Listeners\OrderCreationListener;
 use App\Listeners\OrderDeletionListener;
 use App\Listeners\OrderUpdateListener;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -15,6 +16,8 @@ use Tests\TestCase;
 
 class EventTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function event_listeners_are_listening_to_given_events()
     {
@@ -34,5 +37,23 @@ class EventTest extends TestCase
             OrderDeletedEvent::class,
             OrderDeletionListener::class
         );
+    }
+
+    /** @test */
+    public function triggering_an_event_after_creating_orders()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Event::fake();
+
+        Event::assertNotDispatched(OrderCreatedEvent::class);
+
+        $this->post(route('orders.store'), [
+            'shipper_id' => 4,
+            'name' => 'test order',
+            'price' => 345,
+        ]);
+
+        Event::assertDispatched(OrderCreatedEvent::class);
     }
 }
