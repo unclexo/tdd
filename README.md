@@ -2,9 +2,9 @@
 
 The Laravel app has a number of implemented feature test cases that may help you understand how to test which 
 feature of your Laravel app. If you love to TDD your Laravel application or don't know how then this repo will help 
-you there. So, get started with Test Driven Development.
+you there. So, get started with Test Driven Development and Happy TDD
 
-Happy TDD
+**Note** that tests are not refactored here.
 
 ### TDD in few words
 
@@ -52,7 +52,7 @@ If it does not work try to fake a list of tasks. Even if this one does not work 
 - [Test downloading a private file](https://github.com/unclexo/test-laravel-app/commit/15eb9df78d863dca6a4ceeb0d98abd94eee4a4dd#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR108)
 
 ### Testing Sending Email
-#### What to test
+#### What to test?
 
 What to test while sending an email? Well, you don't need to test how to send emails under the hood. Because that's the 
 job of Laravel email API, not yours. So, test Laravel's email API can be instructed to send emails.
@@ -67,3 +67,21 @@ job of Laravel email API, not yours. So, test Laravel's email API can be instruc
 - [Test sending email](https://github.com/unclexo/test-laravel-app/commit/e7bee040b831c8e847586b1aecd2a97c735d934a#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR142)
 - [Test sending email via queue](https://github.com/unclexo/test-laravel-app/commit/95447528f3aea5a3fea2a6313c88e725cf5ec311#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR159)
 - [Test sending email to bulk users](https://github.com/unclexo/test-laravel-app/commit/05017a81ada5f2a596f206b6d02570e8a7539982#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR176)
+
+### Test Events and Listeners
+#### What to test?
+
+Test the code that triggers an event to check it was dispatched. You don't need to test the execution of 
+a listener. That's Laravel's event API's job. You may unit-test what the listener's `handle()` method does and 
+mock the method's call.
+
+#### How to
+- [Test listeners can listen to given events](https://github.com/unclexo/test-laravel-app/commit/a889a512c66f2c5bc43f601577a193f97568249e#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R19)
+- [Test triggering an event after creating orders](https://github.com/unclexo/test-laravel-app/commit/0c51d73e2ba892b5da5afa7c95556715777694ec#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R43)
+- [Test triggering an event after updating orders](https://github.com/unclexo/test-laravel-app/commit/f684622b6cc100c0620b29bf3972ee52664336ee#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R62)
+- [Test triggering an event after deleting orders](https://github.com/unclexo/test-laravel-app/commit/f25df8761d8ad225a25b7223e1fe6c39a3f0e57b#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R79)
+- [Test listening to builtin events](https://github.com/unclexo/test-laravel-app/commit/94fac2aee6aa45ecc7d718a673ccaec9d5bd340a#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R97)
+- [Test subscribing to builtin event - Login](https://github.com/unclexo/test-laravel-app/commit/27ff63f7286539a09dcc2ae4e37ba236aa2b121c#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R107)
+- [Test subscribing to builtin event - Logout](https://github.com/unclexo/test-laravel-app/commit/606217e75e5fff12d17cca292377e2f2ed78f652#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R127)
+- [Test instructing an event listener to be queued](https://github.com/unclexo/test-laravel-app/commit/ac668406aaf5a7db094eb2da0dfd4f90e6b29a37#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R145)
+- [Test handle method of an event listener](https://github.com/unclexo/test-laravel-app/commit/5b9c22097cf984da7750263488fb409ed3018d40#diff-20de2c0e1bc98b2ce611be196d25576c92534582081c2958a7f0945846e11fcdR17)
