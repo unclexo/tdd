@@ -5,11 +5,15 @@ namespace Tests\Feature;
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderDeletedEvent;
 use App\Events\OrderUpdatedEvent;
+use App\Listeners\LoginListener;
+use App\Listeners\LogoutListener;
 use App\Listeners\OrderCreationListener;
 use App\Listeners\OrderDeletionListener;
 use App\Listeners\OrderUpdateListener;
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -87,5 +91,15 @@ class EventTest extends TestCase
         $this->delete(route('orders.delete', Order::factory()->create()));
 
         Event::assertDispatched(OrderDeletedEvent::class);
+    }
+
+    /** @test */
+    public function listening_to_builtin_events()
+    {
+        Event::fake();
+
+        Event::assertListening(Login::class, LoginListener::class);
+
+        Event::assertListening(Logout::class, LogoutListener::class);
     }
 }
