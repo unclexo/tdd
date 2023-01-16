@@ -102,4 +102,24 @@ class EventTest extends TestCase
 
         Event::assertListening(Logout::class, LogoutListener::class);
     }
+
+    /** @test */
+    public function subscribing_to_login_event()
+    {
+        $user = User::factory()->create();
+
+        Event::fake();
+
+        Event::assertNotDispatched(Login::class);
+
+        // Login event triggers when a user logs in
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        Event::assertDispatched(Login::class, function($event) use($user) {
+            return $event->user->email === $user->email;
+        });
+    }
 }
