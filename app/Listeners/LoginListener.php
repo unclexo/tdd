@@ -22,10 +22,22 @@ class LoginListener
      * Handle the event.
      *
      * @param  \Illuminate\Auth\Events\Login  $event
-     * @return void
+     * @return mixed
      */
     public function handle(Login $event)
     {
-        logger("Logged in user: {$event->user->email}");
+        // Do your stuff
+
+        // logger("Logged in user: {$event->user->email}");
+
+        // For testing purpose only, in this case.
+        $this->doSomething();
+
+        // For testing purpose only, in this case.
+        return $event;
+    }
+
+    public function doSomething()
+    {
     }
 }
