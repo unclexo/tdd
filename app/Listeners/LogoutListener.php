@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\Logout;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -21,11 +21,11 @@ class LogoutListener
     /**
      * Handle the event.
      *
-     * @param  \App\Events\Logout  $event
+     * @param  \Illuminate\Auth\Events\Logout  $event
      * @return void
      */
     public function handle(Logout $event)
     {
-        //
+        logger("Logged out user: {$event->user->email}");
     }
 }

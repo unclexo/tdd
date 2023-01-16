@@ -122,4 +122,21 @@ class EventTest extends TestCase
             return $event->user->email === $user->email;
         });
     }
+
+    /** @test */
+    public function subscribing_to_logout_event()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        Event::fake();
+
+        Event::assertNotDispatched(Logout::class);
+
+        // Logout event triggers when a user logs out
+        $this->post(route('logout'));
+
+        Event::assertDispatched(Logout::class, function($event) use($user) {
+            return $event->user->email === $user->email;
+        });
+    }
 }
