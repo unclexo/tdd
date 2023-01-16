@@ -18,4 +18,12 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $user->posts);
     }
+
+    /** @test */
+    public function a_user_has_orders()
+    {
+        $user = User::factory()->create();
+
+        $this->assertInstanceOf(Collection::class, $user->orders);
+    }
 }

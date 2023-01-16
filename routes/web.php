@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaUploaderController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderShipmentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostPublishController;
@@ -68,5 +69,13 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('orders/{order}/shipped/advanced', [OrderShipmentController::class, 'shipOrderAdvanced'])
             ->name('order.shipped.advanced');
+    });
+
+    Route::prefix('orders')->group(function() {
+        Route::post('/', [OrderController::class, 'store'])->name('orders.store');
+
+        Route::patch('/{order}', [OrderController::class, 'update'])->name('orders.update');
+
+        Route::delete('/{order}', [OrderController::class, 'destroy'])->name('orders.delete');
     });
 });

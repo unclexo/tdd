@@ -47,6 +47,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function ccEmails()
     {
         // Apply logic for getting cc emails
