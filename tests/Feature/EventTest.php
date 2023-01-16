@@ -14,6 +14,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -138,5 +139,14 @@ class EventTest extends TestCase
         Event::assertDispatched(Logout::class, function($event) use($user) {
             return $event->user->email === $user->email;
         });
+    }
+
+    /** @test */
+    public function an_event_listener_can_be_instructed_to_be_queued()
+    {
+        $this->assertInstanceOf(
+            ShouldQueue::class,
+            app(OrderCreationListener::class)
+        );
     }
 }

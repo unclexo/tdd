@@ -6,7 +6,7 @@ use App\Events\OrderCreatedEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class OrderCreationListener
+class OrderCreationListener implements ShouldQueue
 {
     /**
      * Create the event listener.
