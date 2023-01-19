@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\OrderShipped;
 use App\Models\Order;
+use App\Notifications\OrderShipmentNotification;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class OrderShipmentController extends Controller
 {
@@ -34,6 +36,16 @@ class OrderShipmentController extends Controller
             ->cc($user->ccEmails())
             ->bcc($user->bccEmails())
             ->queue($mailable);
+
+        return ['message' => 'Your order has been shipped.'];
+    }
+
+    public function notifyForOrderShipment(Order $order)
+    {
+        $order->status = 'shipped';
+        $order->save();
+
+        Notification::send(auth()->user(), new OrderShipmentNotification($order));
 
         return ['message' => 'Your order has been shipped.'];
     }

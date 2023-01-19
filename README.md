@@ -68,7 +68,8 @@ job of Laravel email API, not yours. So, test Laravel's email API can be instruc
 - [Test sending email via queue](https://github.com/unclexo/test-laravel-app/commit/95447528f3aea5a3fea2a6313c88e725cf5ec311#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR159)
 - [Test sending email to bulk users](https://github.com/unclexo/test-laravel-app/commit/05017a81ada5f2a596f206b6d02570e8a7539982#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR176)
 
-### Test Events and Listeners
+
+### Testing Events and Listeners
 #### What to test?
 
 Test the code that triggers an event to check it was dispatched. You don't need to test the execution of 
