@@ -4,7 +4,7 @@ The Laravel app has a number of implemented feature test cases that may help you
 feature of your Laravel app. If you love to TDD your Laravel application or don't know how then this repo will help 
 you there. So, get started with Test Driven Development and Happy TDD
 
-**Note** that tests are not refactored here.
+**Note** that some tests are not refactored here.
 
 ### TDD in few words
 
@@ -51,6 +51,7 @@ If it does not work try to fake a list of tasks. Even if this one does not work 
 - [Test resizing uploaded image](https://github.com/unclexo/test-laravel-app/commit/fe489a5ed36f5b906ed46f65dc84307ceec96633#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR90)
 - [Test downloading a private file](https://github.com/unclexo/test-laravel-app/commit/15eb9df78d863dca6a4ceeb0d98abd94eee4a4dd#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR108)
 
+
 ### Testing Sending Email
 #### What to test?
 
@@ -86,3 +87,17 @@ mock the method's call.
 - [Test subscribing to builtin event - Logout](https://github.com/unclexo/test-laravel-app/commit/606217e75e5fff12d17cca292377e2f2ed78f652#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R127)
 - [Test instructing an event listener to be queued](https://github.com/unclexo/test-laravel-app/commit/ac668406aaf5a7db094eb2da0dfd4f90e6b29a37#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R145)
 - [Test handle method of an event listener](https://github.com/unclexo/test-laravel-app/commit/5b9c22097cf984da7750263488fb409ed3018d40#diff-20de2c0e1bc98b2ce611be196d25576c92534582081c2958a7f0945846e11fcdR17)
+
+
+### Testing Notifications
+#### What to test?
+
+Test Laravel notification API can be instructed to send notifications. Because sending notifications is unrelated to 
+the code you are actually testing.
+
+#### How to
+- [Test notifying users after shipping orders](https://github.com/unclexo/test-laravel-app/commit/5c9418d0d01bc823315e567d442096414313b199#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR20)
+- [Test notifying user while requesting reset password link](https://github.com/unclexo/test-laravel-app/commit/7e26369343e5517daf8fd9cff3910f61e29af50e#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR37)
+- [Test reset password screen can be seen with token](https://github.com/unclexo/test-laravel-app/commit/2ce0701ffdb404d02fb46ae084a21dfd1709de7d#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR51)
+- [Test password can be reset with valid token](https://github.com/unclexo/test-laravel-app/commit/6aab4fbae90f91104b857bcb064537ef64c24346#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR69)
+- [Test a notification can be instructed to be queued](https://github.com/unclexo/test-laravel-app/commit/9c9ce2636be6c9f786fb3f8d1ad590ac7b9b3cac#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR94)
