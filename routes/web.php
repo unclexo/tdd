@@ -69,6 +69,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('orders/{order}/shipped/advanced', [OrderShipmentController::class, 'shipOrderAdvanced'])
             ->name('order.shipped.advanced');
+
+        Route::patch('orders/{order}/shipment/notification', [OrderShipmentController::class, 'notifyForOrderShipment'])
+            ->name('order.shipment.notification');
     });
 
     Route::prefix('orders')->group(function() {
