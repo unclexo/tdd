@@ -46,4 +46,22 @@ class NotificationTest extends TestCase
 
         Notification::assertSentTo($user, ResetPassword::class);
     }
+
+    /** @test */
+    public function reset_password_screen_can_be_rendered_with_token()
+    {
+        Notification::fake();
+
+        $user = User::factory()->create();
+
+        $this->post(route('password.email'), ['email' => $user->email]);
+
+        Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
+            $response = $this->get(route('password.reset', $notification->token));
+
+            $response->assertStatus(200);
+
+            return true;
+        });
+    }
 }
