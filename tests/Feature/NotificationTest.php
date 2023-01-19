@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Notifications\OrderShipmentNotification;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -87,5 +88,14 @@ class NotificationTest extends TestCase
 
             return true;
         });
+    }
+
+    /** @test */
+    public function a_notification_can_be_instructed_to_be_queued()
+    {
+        $this->assertInstanceOf(
+            ShouldQueue::class,
+            app(OrderShipmentNotification::class)
+        );
     }
 }
