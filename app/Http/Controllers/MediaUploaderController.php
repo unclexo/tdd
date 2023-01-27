@@ -97,13 +97,28 @@ class MediaUploaderController extends Controller
         return response()->download($privateFilepath, $filename);
     }
 
+    public function uploader()
+    {
+        return view('upload.uploader');
+    }
+
     public function uploadAndResizing()
     {
+        \request()->validate([
+            'image' => ['required', 'mimes:jpg,png', 'max:1024'],
+        ]);
+
         $image = request()->file('image');
 
         if ($image instanceof UploadedFile) {
             ImageUploadAndResizingJob::dispatch($image->getMimeType(), base64_encode($image->getContent()))
                 ->delay(now()->addSeconds(5));
+
+            return redirect()->route('uploader')->with([
+                'message' => 'Image upload and resizing may take few moments.'
+            ]);
         }
+
+        return redirect()->route('uploader')->with(['failed' => 'Could not upload the image.']);
     }
 }
