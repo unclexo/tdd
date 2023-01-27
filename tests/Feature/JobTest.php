@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Jobs\ImageUploadAndResizingJob;
 use App\Models\User;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -57,5 +58,23 @@ class JobTest extends TestCase
         $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()));
 
         Storage::disk('public')->assertExists($job->handle());
+    }
+
+    /** @test */
+    public function handle_method_returns_false_on_upload_fail()
+    {
+        $image = UploadedFile::fake()
+            ->image('image.jpg', 50, 50)
+            ->mimeType('image/jpeg');
+
+        $storage = $this->mock(Filesystem::class);
+
+        // Make the put() method return false so that the image upload fails
+        $storage->shouldReceive('put')->andReturn(false);
+
+        // Pass mocked storage object for returning false from put() method
+        $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()), $storage);
+
+        $this->assertFalse($job->handle());
     }
 }

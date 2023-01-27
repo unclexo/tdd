@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -24,34 +25,45 @@ class ImageUploadAndResizingJob implements ShouldQueue
         '640x480' => [640, 480],
     ];
 
+    private ?Filesystem $storage;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(string $mimeType, string $imageContent)
+    public function __construct(string $mimeType, string $imageContent, ?Filesystem $storage = null)
     {
         $this->mimeType = $mimeType;
         $this->imageContent = $imageContent;
+        $this->storage = $storage;
+    }
+
+    public function storage()
+    {
+        if (! $this->storage)
+            $this->storage = Storage::disk('public');
+
+        return $this->storage;
     }
 
     /**
      * Execute the job.
      *
-     * @return array
+     * @return array|bool
      */
     public function handle()
     {
-        $storage = Storage::disk('public');
-
         $path = 'fake-image-name.jpg';
 
-        $storage->put($path, base64_decode($this->imageContent));
+        if (! $this->storage()->put($path, base64_decode($this->imageContent))) {
+            return false;
+        }
 
         $paths = [];
 
         foreach ($this->resolutions as $key => $resolution) {
-            $image = Image::make($absolutePath = $storage->path($path))
+            $image = Image::make($absolutePath = $this->storage()->path($path))
                 ->resize($resolution[0], $resolution[1])
                 ->save($this->absolutePathWithResolutionKey($absolutePath, $key));
 
