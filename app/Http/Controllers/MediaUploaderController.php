@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadMultipleFilesRequest;
+use App\Jobs\ImageUploadAndResizingJob;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -94,5 +95,15 @@ class MediaUploaderController extends Controller
         $privateFilepath = Storage::disk('local')->path('private/private-file.pdf');
 
         return response()->download($privateFilepath, $filename);
+    }
+
+    public function uploadAndResizing()
+    {
+        $image = request()->file('image');
+
+        if ($image instanceof UploadedFile) {
+            ImageUploadAndResizingJob::dispatch($image->getMimeType(), base64_encode($image->getContent()))
+                ->delay(now()->addSeconds(5));
+        }
     }
 }
