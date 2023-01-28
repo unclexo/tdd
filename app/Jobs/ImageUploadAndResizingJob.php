@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -56,15 +57,17 @@ class ImageUploadAndResizingJob implements ShouldQueue
      */
     public function handle()
     {
-        $path = 'fake-image-name.jpg';
-        
-        if (! $this->isAllowedExtension($this->getExtensionFromMimeType())) {
+        if (! $this->isValidImage())
             return false;
-        }
 
-        if (! $this->storage()->put($path, base64_decode($this->imageContent))) {
+        $path = sprintf(
+            "%s.%s",
+            bin2hex(random_bytes(16)), // Apply your algorithm
+            $this->getExtensionFromMimeType($this->mimeType)
+        );
+
+        if (! $this->storage()->put($path, base64_decode($this->imageContent)))
             return false;
-        }
 
         $paths = [];
 
@@ -79,19 +82,39 @@ class ImageUploadAndResizingJob implements ShouldQueue
         return $paths;
     }
 
+    private function isValidImage()
+    {
+        if (
+            base64_encode(base64_decode($this->imageContent, true)) === $this->imageContent &&
+            ($file = tmpfile()) &&
+            fwrite($file, base64_decode($this->imageContent))
+        ) {
+            $mimeType = mime_content_type(stream_get_meta_data($file)['uri']);
+
+            fclose($file);
+
+            $extensionFromContent = $this->getExtensionFromMimeType($mimeType);
+
+            return $this->getExtensionFromMimeType($this->mimeType) === $extensionFromContent &&
+                $this->isAllowedExtension($extensionFromContent);
+        }
+
+        return false;
+    }
+
+    private function getExtensionFromMimeType(string $mimeType)
+    {
+        if (! preg_match("/^[a-z]+\/[a-z0-9\.\+-]+$/", $mimeType))
+            return false;
+
+        [, $extension] = explode('/', $mimeType);
+
+        return $extension;
+    }
+
     private function isAllowedExtension(string $extension)
     {
         return in_array($extension, $this->allowedExtension);
-    }
-
-    private function getExtensionFromMimeType()
-    {
-        if (! preg_match("/^[a-z]+\/[a-z0-9\.\+-]+$/", $this->mimeType))
-            return false;
-
-        [, $extension] = explode('/', $this->mimeType);
-
-        return $extension;
     }
 
     /**

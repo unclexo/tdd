@@ -87,4 +87,19 @@ class JobTest extends TestCase
 
         $this->assertFalse($job->handle());
     }
+
+    /** @test */
+    public function handle_method_returns_false_on_invalid_image_content()
+    {
+        $image = UploadedFile::fake()
+            ->image('image.jpg', 50, 50)
+            ->mimeType('image/jpeg');
+
+        Storage::fake('public');
+
+        // Note that the image content is NOT base64 encoded
+        $job = new ImageUploadAndResizingJob($image->getMimeType(), $image->getContent());
+
+        $this->assertFalse($job->handle());
+    }
 }
