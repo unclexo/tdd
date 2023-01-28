@@ -57,7 +57,7 @@ class ImageUploadAndResizingJob implements ShouldQueue
      */
     public function handle()
     {
-        if (! $this->isValidImage())
+        if (! $this->isFilteredResolutions() || ! $this->isValidImage())
             return false;
 
         $path = sprintf(
@@ -80,6 +80,17 @@ class ImageUploadAndResizingJob implements ShouldQueue
         }
 
         return $paths;
+    }
+
+    private function isFilteredResolutions()
+    {
+        return array_filter((array) $this->resolutions, function ($value, $key) {
+            return is_array($value) &&
+                count($value) === 2 &&
+                is_string($key) &&
+                $value[0] > 0 &&
+                $value[1] > 0;
+        }, ARRAY_FILTER_USE_BOTH);
     }
 
     private function isValidImage()

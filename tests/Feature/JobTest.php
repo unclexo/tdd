@@ -102,4 +102,27 @@ class JobTest extends TestCase
 
         $this->assertFalse($job->handle());
     }
+
+    /** @test */
+    public function handle_method_returns_false_on_invalid_resolutions()
+    {
+        Storage::fake('public');
+
+        $image = UploadedFile::fake()
+            ->image('image.jpg', 50, 50)
+            ->mimeType('image/jpeg');
+
+        $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()));
+
+        $job->resolutions = [];
+
+        $this->assertFalse($job->handle());
+
+        $job->resolutions = [
+            '50x50' => [-50, 50], // Note the negative number
+            '640x480' => [640], // Note the height is not provided
+        ];
+
+        $this->assertFalse($job->handle());
+    }
 }
