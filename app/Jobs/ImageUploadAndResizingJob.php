@@ -25,6 +25,8 @@ class ImageUploadAndResizingJob implements ShouldQueue
         '640x480' => [640, 480],
     ];
 
+    public array $allowedExtension = ['jpg', 'jpeg', 'png'];
+
     private ?Filesystem $storage;
 
     /**
@@ -55,6 +57,10 @@ class ImageUploadAndResizingJob implements ShouldQueue
     public function handle()
     {
         $path = 'fake-image-name.jpg';
+        
+        if (! $this->isAllowedExtension($this->getExtensionFromMimeType())) {
+            return false;
+        }
 
         if (! $this->storage()->put($path, base64_decode($this->imageContent))) {
             return false;
@@ -71,6 +77,21 @@ class ImageUploadAndResizingJob implements ShouldQueue
         }
 
         return $paths;
+    }
+
+    private function isAllowedExtension(string $extension)
+    {
+        return in_array($extension, $this->allowedExtension);
+    }
+
+    private function getExtensionFromMimeType()
+    {
+        if (! preg_match("/^[a-z]+\/[a-z0-9\.\+-]+$/", $this->mimeType))
+            return false;
+
+        [, $extension] = explode('/', $this->mimeType);
+
+        return $extension;
     }
 
     /**

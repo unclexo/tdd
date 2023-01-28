@@ -77,4 +77,14 @@ class JobTest extends TestCase
 
         $this->assertFalse($job->handle());
     }
+
+    /** @test */
+    public function handle_method_returns_false_on_invalid_mime_type()
+    {
+        $file = UploadedFile::fake()->create('file.txt', '10', 'text/plain');
+
+        $job = new ImageUploadAndResizingJob($file->getMimeType(), base64_encode($file->getContent()));
+
+        $this->assertFalse($job->handle());
+    }
 }
