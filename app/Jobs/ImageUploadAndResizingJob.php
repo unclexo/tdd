@@ -69,15 +69,17 @@ class ImageUploadAndResizingJob implements ShouldQueue
         if (! $this->storage()->put($path, base64_decode($this->imageContent)))
             return false;
 
-        $paths = [];
+        $paths = ['original' => $path, 'resized' => []];
 
         foreach ($this->resolutions as $key => $resolution) {
             $image = Image::make($absolutePath = $this->storage()->path($path))
                 ->resize($resolution[0], $resolution[1])
                 ->save($this->absolutePathWithResolutionKey($absolutePath, $key));
 
-            $paths[] = $image->basename;
+            $paths['resized'][] = $image->basename;
         }
+
+        $this->storage()->delete($path);
 
         return $paths;
     }

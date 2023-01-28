@@ -57,7 +57,7 @@ class JobTest extends TestCase
 
         $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()));
 
-        Storage::disk('public')->assertExists($job->handle());
+        Storage::disk('public')->assertExists($job->handle()['resized']);
     }
 
     /** @test */
@@ -124,5 +124,23 @@ class JobTest extends TestCase
         ];
 
         $this->assertFalse($job->handle());
+    }
+
+    /** @test */
+    public function handle_method_deletes_original_image_after_resizing_it()
+    {
+        Storage::fake('public');
+
+        $image = UploadedFile::fake()
+            ->image('image.jpg', 50, 50)
+            ->mimeType('image/jpeg');
+
+        $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()));
+
+        $result = $job->handle();
+
+        Storage::disk('public')->assertMissing($result['original']);
+
+        Storage::disk('public')->assertExists($result['resized']);
     }
 }
