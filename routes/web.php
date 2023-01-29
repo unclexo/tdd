@@ -55,9 +55,13 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/upload/resize', 'resize')->name('upload.resize');
 
+        Route::post('/upload/resize/via/queue', 'uploadAndResizing')->name('upload.resize.via.queue');
+
         Route::post('/upload/private', 'uploadPrivate')->name('upload.private');
 
         Route::get('/upload/download/{filename}', 'download')->name('upload.download');
+
+        Route::get('/uploader', 'uploader')->name('uploader');
     });
 
     Route::prefix('mailable')->group(function() {
