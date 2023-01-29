@@ -4,6 +4,9 @@ The Laravel app has a number of implemented feature test cases that may help you
 feature of your Laravel app. If you love to TDD your Laravel application or don't know how then this repo will help 
 you there. So, get started with Test Driven Development and Happy TDD
 
+Don't hesitate to ask me on [LinkedIn](https://bd.linkedin.com/in/unclexo) or [Twitter](https://twitter.com/unclexo) 
+if you don't understand any of these tests.
+
 **Note** that some tests are not refactored here.
 
 ### TDD in few words
@@ -101,3 +104,41 @@ the code you are actually testing.
 - [Test reset password screen can be seen with token](https://github.com/unclexo/test-laravel-app/commit/2ce0701ffdb404d02fb46ae084a21dfd1709de7d#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR51)
 - [Test password can be reset with valid token](https://github.com/unclexo/test-laravel-app/commit/6aab4fbae90f91104b857bcb064537ef64c24346#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR69)
 - [Test a notification can be instructed to be queued](https://github.com/unclexo/test-laravel-app/commit/9c9ce2636be6c9f786fb3f8d1ad590ac7b9b3cac#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR94)
+
+
+### Testing Jobs / Queue 
+#### Test-Driven Development with a real world example 
+
+This section is for how to upload, resize, and store image info into a database but via a **queued** job and 
+**applying TDD**. What to test or where to start is outlined below. If you follow the steps given below, you'll have 
+a good grasp of how to proceed with TDD while developing a new feature or making a change.      
+
+**Note**: Make sure you've installed `predis/predis` and `intervention/image`, configured redis, and run migrations.
+
+**Tip**: Go through each file involved in a particular test.
+
+Step 1 - [Test a job is dispatchable](https://github.com/unclexo/test-laravel-app/commit/6de30acc8a4c74e7e6d193d7e2d820d28d8773e8#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R14)
+
+Step 2 - [Test a job can be queued](https://github.com/unclexo/test-laravel-app/commit/41912438468ddcdb74025256d2847299db6fcc74#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R32)
+
+Step 3 - [Test a queued job can upload and resize an image](https://github.com/unclexo/test-laravel-app/commit/b49cd299092364746a367e8e0a41f9c7ffb5370a#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R49)
+
+Step 4 - [Test handle method returns false on upload fail](https://github.com/unclexo/test-laravel-app/commit/5ff4b35b936eaa9c248807c8c0911f23666fb69c#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R64)
+
+Step 5 - [Test handle method returns false on invalid mime type](https://github.com/unclexo/test-laravel-app/commit/2ff6ae5d38cf402114fc61857001c07d589a8414#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R82)
+
+Step 6 - [Test handle method returns false on invalid image content](https://github.com/unclexo/test-laravel-app/commit/3a99822b66d4723d47fa1ba8056b336670ec3504#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R92)
+
+Step 7 - [Test handle method returns false on invalid resolutions](https://github.com/unclexo/test-laravel-app/commit/ace2fc689543a50c0eb209d863b35640cfb6382c#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R107)
+
+Step 8 - [Test handle method deletes original image after resizing it](https://github.com/unclexo/test-laravel-app/commit/764cd0d6426482ddcde8a7591938ac8f1f5d5e86#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R130)
+
+Step 9 - [Test refactoring and storing image info into database](https://github.com/unclexo/test-laravel-app/commit/f831762763ababf302d9540a0bf461f912b36983#diff-23b75d71e87d07f479550169f3f37eb57ef3ab8c71afbd9a89c692df21a6f7e8R153)
+
+Hooray! You've done test-driven development!
+
+**Note** that I've left some refactorings and tests for you. The calling of methods of this `Intervention\Image\Facades\Image` 
+class is not stubbed here, for example. 
+
+One more thing, most tests about the `Job` class should go to the `Unit` section. But I've put them here for you so that you can 
+see them all in a single place.
