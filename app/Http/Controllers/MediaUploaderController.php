@@ -111,8 +111,12 @@ class MediaUploaderController extends Controller
         $image = request()->file('image');
 
         if ($image instanceof UploadedFile) {
-            ImageUploadAndResizingJob::dispatch($image->getMimeType(), base64_encode($image->getContent()))
-                ->delay(now()->addSeconds(5));
+            $data = [
+                'user_id' => auth()->user()->id,
+                'imageContent' => base64_encode($image->getContent())
+            ];
+
+            ImageUploadAndResizingJob::dispatch($data)->delay(now()->addSeconds(5));
 
             return redirect()->route('uploader')->with([
                 'message' => 'Image upload and resizing may take few moments.'

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 
+use App\Models\Media;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -17,7 +18,7 @@ class ImageUploadAndResizingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public string $mimeType;
+    public array $data;
 
     public string $imageContent;
 
@@ -33,13 +34,17 @@ class ImageUploadAndResizingJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param array $data
      */
-    public function __construct(string $mimeType, string $imageContent, ?Filesystem $storage = null)
+    public function __construct(array $data)
     {
-        $this->mimeType = $mimeType;
-        $this->imageContent = $imageContent;
-        $this->storage = $storage;
+        $this->data = $data;
+
+        $this->storage = $data['storage'] ?? null;
+
+        $this->imageContent = $data['imageContent'] ?? '';
+
+        $this->allowedExtension = $data['allowedExtension'] ?? $this->allowedExtension;
     }
 
     public function storage()
@@ -57,29 +62,33 @@ class ImageUploadAndResizingJob implements ShouldQueue
      */
     public function handle()
     {
-        if (! $this->isFilteredResolutions() || ! $this->isValidImage())
+        if (! $this->isFilteredResolutions() || ! ($extension = $this->extensionFromImageContent()))
             return false;
 
-        $path = sprintf(
-            "%s.%s",
-            bin2hex(random_bytes(16)), // Apply your algorithm
-            $this->getExtensionFromMimeType($this->mimeType)
-        );
-
-        if (! $this->storage()->put($path, base64_decode($this->imageContent)))
+        if (! $this->storage()->put($imageName = $this->imageName($extension), base64_decode($this->imageContent)))
             return false;
 
-        $paths = ['original' => $path, 'resized' => []];
+        $paths = ['original' => $imageName, 'resized' => []];
 
         foreach ($this->resolutions as $key => $resolution) {
-            $image = Image::make($absolutePath = $this->storage()->path($path))
+            $image = Image::make($absolutePath = $this->storage()->path($imageName))
                 ->resize($resolution[0], $resolution[1])
                 ->save($this->absolutePathWithResolutionKey($absolutePath, $key));
+
+            // Save image info into database
+            Media::create([
+                'user_id' => $this->data['user_id'] ?? null,
+                'name' => $image->basename,
+                'resolution' => json_encode($resolution),
+                'disk' => $this->data['disk'] ?? 'public',
+                'type' => $this->data['type'] ?? null,
+                'model' => $this->data['model'] ?? null,
+            ]);
 
             $paths['resized'][] = $image->basename;
         }
 
-        $this->storage()->delete($path);
+        $this->storage()->delete($imageName);
 
         return $paths;
     }
@@ -95,7 +104,7 @@ class ImageUploadAndResizingJob implements ShouldQueue
         }, ARRAY_FILTER_USE_BOTH);
     }
 
-    private function isValidImage()
+    private function extensionFromImageContent()
     {
         if (
             base64_encode(base64_decode($this->imageContent, true)) === $this->imageContent &&
@@ -106,13 +115,18 @@ class ImageUploadAndResizingJob implements ShouldQueue
 
             fclose($file);
 
-            $extensionFromContent = $this->getExtensionFromMimeType($mimeType);
+            if (! $this->isAllowedExtension($extension = $this->getExtensionFromMimeType($mimeType)))
+                return false;
 
-            return $this->getExtensionFromMimeType($this->mimeType) === $extensionFromContent &&
-                $this->isAllowedExtension($extensionFromContent);
+            return $extension;
         }
 
         return false;
+    }
+
+    private function isAllowedExtension(string $extension)
+    {
+        return in_array($extension, (array) $this->allowedExtension);
     }
 
     private function getExtensionFromMimeType(string $mimeType)
@@ -125,9 +139,13 @@ class ImageUploadAndResizingJob implements ShouldQueue
         return $extension;
     }
 
-    private function isAllowedExtension(string $extension)
+    private function imageName(string $extension)
     {
-        return in_array($extension, $this->allowedExtension);
+        return sprintf(
+            "%s.%s",
+            bin2hex(random_bytes(16)), // Apply your algorithm
+            $extension
+        );
     }
 
     /**

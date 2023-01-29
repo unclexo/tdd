@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Jobs\ImageUploadAndResizingJob;
 use App\Models\User;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -20,14 +19,13 @@ class JobTest extends TestCase
     /** @test */
     public function a_job_is_dispatchable()
     {
-        $job = new \ReflectionClass(ImageUploadAndResizingJob::class);
+        $job = app(ImageUploadAndResizingJob::class, ['data' => []]);
 
-        $this->assertTrue(in_array(Dispatchable::class, $job->getTraitNames()));
+        $this->assertTrue(method_exists($job, '__construct'));
 
-        $this->assertTrue(method_exists(
-            app(ImageUploadAndResizingJob::class, ['mimeType' => 'image/jpeg', 'imageContent' => 'content']),
-            'handle'
-        ));
+        $this->assertTrue(method_exists($job, 'dispatch'));
+
+        $this->assertTrue(method_exists($job, 'handle'));
     }
 
     /** @test */
@@ -55,9 +53,11 @@ class JobTest extends TestCase
             ->image('a-large-image.jpg', 1000, 1000) // Increase width and height to upload a large image
             ->mimeType('image/jpeg');
 
-        $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()));
+        $data = [
+            'imageContent' => base64_encode($image->getContent()),
+        ];
 
-        Storage::disk('public')->assertExists($job->handle()['resized']);
+        Storage::disk('public')->assertExists((new ImageUploadAndResizingJob($data))->handle()['resized']);
     }
 
     /** @test */
@@ -72,10 +72,28 @@ class JobTest extends TestCase
         // Make the put() method return false so that the image upload fails
         $storage->shouldReceive('put')->andReturn(false);
 
-        // Pass mocked storage object for returning false from put() method
-        $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()), $storage);
+        $data = [
+            'storage' => $storage, // Pass mocked storage object for returning false from put() method
+            'imageContent' => base64_encode($image->getContent()),
+        ];
 
-        $this->assertFalse($job->handle());
+        $this->assertFalse((new ImageUploadAndResizingJob($data))->handle());
+    }
+
+    /** @test */
+    public function handle_method_returns_false_on_invalid_image_content()
+    {
+        Storage::fake('public');
+
+        $image = UploadedFile::fake()
+            ->image('image.jpg', 50, 50)
+            ->mimeType('image/jpeg');
+
+        $data = [
+            'imageContent' => $image->getContent(), // Note that image content is NOT base64 encoded
+        ];
+
+        $this->assertFalse((new ImageUploadAndResizingJob($data))->handle());
     }
 
     /** @test */
@@ -83,24 +101,9 @@ class JobTest extends TestCase
     {
         $file = UploadedFile::fake()->create('file.txt', '10', 'text/plain');
 
-        $job = new ImageUploadAndResizingJob($file->getMimeType(), base64_encode($file->getContent()));
-
-        $this->assertFalse($job->handle());
-    }
-
-    /** @test */
-    public function handle_method_returns_false_on_invalid_image_content()
-    {
-        $image = UploadedFile::fake()
-            ->image('image.jpg', 50, 50)
-            ->mimeType('image/jpeg');
-
-        Storage::fake('public');
-
-        // Note that the image content is NOT base64 encoded
-        $job = new ImageUploadAndResizingJob($image->getMimeType(), $image->getContent());
-
-        $this->assertFalse($job->handle());
+        $this->assertFalse((new ImageUploadAndResizingJob([
+            'imageContent' => base64_encode($file->getContent()),
+        ]))->handle());
     }
 
     /** @test */
@@ -112,7 +115,9 @@ class JobTest extends TestCase
             ->image('image.jpg', 50, 50)
             ->mimeType('image/jpeg');
 
-        $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()));
+        $job = new ImageUploadAndResizingJob([
+            'imageContent' => base64_encode($image->getContent()),
+        ]);
 
         $job->resolutions = [];
 
@@ -135,12 +140,34 @@ class JobTest extends TestCase
             ->image('image.jpg', 50, 50)
             ->mimeType('image/jpeg');
 
-        $job = new ImageUploadAndResizingJob($image->getMimeType(), base64_encode($image->getContent()));
-
-        $result = $job->handle();
+        $result = (new ImageUploadAndResizingJob([
+            'imageContent' => base64_encode($image->getContent()),
+        ]))->handle();
 
         Storage::disk('public')->assertMissing($result['original']);
 
         Storage::disk('public')->assertExists($result['resized']);
+    }
+
+    /** @test */
+    public function image_information_can_be_stored_in_database_from_within_a_job()
+    {
+        Storage::fake('public');
+
+        $image = UploadedFile::fake()
+            ->image('image.jpg', 50, 50)
+            ->mimeType('image/jpeg');
+
+        $result = (new ImageUploadAndResizingJob([
+            'disk' => 'public',
+            'type' => 'sometype',
+            'model' => 'App\Models\SomeModel',
+            'imageContent' => base64_encode($image->getContent())
+        ]))->handle();
+
+        $this->assertDatabaseHas('media', [
+            'name' => $result['resized'],
+            'model' => 'App\Models\SomeModel',
+        ]);
     }
 }
