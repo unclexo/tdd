@@ -1,0 +1,31 @@
+services:
+  tdd-server:
+    image: nginx:1.23-alpine
+    container_name: tdd-server
+    restart: unless-stopped
+    ports:
+      - 8888:80
+    volumes:
+      - ./:/var/www/html
+      - ./nginx.dev.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - tdd-network
+    depends_on:
+      - tdd-php
+  
+  tdd-php:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: tdd-php
+    container_name: tdd-php
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - tdd-network
+
+networks:
+  tdd-network:
+    driver: bridge
+    name: tdd-network

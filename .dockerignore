@@ -1,0 +1,13 @@
+.git
+node_modules
+vendor
+storage/*.log
+.env
+.idea
+*.swp
+*.swo
+.DS_Store
+*.log
+npm-debug.log
+yarn-error.log
+*.sqlite
