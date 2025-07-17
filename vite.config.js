@@ -11,4 +11,10 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        fs: {
+            // Defaults deny access to files outside of root
+            deny: ['.env', '.env.local']
+        }
+    }
 });
