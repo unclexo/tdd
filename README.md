@@ -2,9 +2,9 @@
 
 The Laravel app has a number of implemented feature test cases that may help you understand how to test which 
 feature of your Laravel app. If you love to TDD your Laravel application or don't know how then this repo will help 
-you there. So, get started with Test Driven Development and Happy TDD
+you there. Get started with Test Driven Development and Happy TDD!
 
-Don't hesitate to ask me on [LinkedIn](https://bd.linkedin.com/in/unclexo) or [Twitter](https://twitter.com/unclexo) 
+Don't hesitate to ask me on [Twitter](https://twitter.com/unclexo) 
 if you don't understand any of these tests.
 
 **Note** that some tests are not refactored here.
@@ -26,16 +26,72 @@ process
 
 This is from [Kent Beck's](https://en.wikipedia.org/wiki/Kent_Beck) [TDD by example](https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530).
 
+### Installation
+
+Follow these steps to set up the application.
+
+#### 1. Build Docker Image
+
+```bash
+docker compose build --build-arg USER=$(whoami) --build-arg UID=$(id -u) --build-arg GID=$(id -g)
+```
+
+#### 2. Start Containers
+
+```bash
+docker compose up -d
+```
+
+#### 3. Verify Running Containers
+
+```bash
+docker container list
+```
+
+#### 4. Install PHP Dependencies
+
+```bash
+docker exec -it tdd-php composer install
+```
+
+#### 5. Set Application Key
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then generate the application key:
+
+```bash
+docker exec -it tdd-php php artisan key:generate
+```
+
+#### 6. Install and Build Frontend
+
+```bash
+yarn install && yarn build
+```
+
+#### 7. Run Tests
+
+```bash
+docker exec -it tdd-php php artisan test
+```
+
 ### Where to start
 
-Where do I start? Don't worry! It happens. When you're not sure where to start, try to figure out what module or class 
+Where do I start? Don't worry! When you're not sure where to start, try to figure out what module or class 
 or function you're going to deal with. If you get one, break it down into a set of tasks. Then pick a task and go with 
 that.
 
-If it does not work try to fake a list of tasks. Even if this one does not work too, take a walk and repeat.
+If it does not work try to fake a list of tasks.
 
 ### Testing Form Submission
+
 ##### How to
+
 - [Test a simple form submission](https://github.com/unclexo/test-laravel-app/commit/b97d903e491156a4cdb0cefd379639310ff6a22f)
 - [Test creating a blog post](https://github.com/unclexo/test-laravel-app/commit/f4f61092115518780997cc96ba959486479a19ad#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR15)
 - [Test displaying a blog post](https://github.com/unclexo/test-laravel-app/commit/cc242030ff7499cf2c6ae7d0ca78f292b206da86#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR25)
@@ -46,7 +102,9 @@ If it does not work try to fake a list of tasks. Even if this one does not work 
 - [Test unauthenticated users cannot manage posts](https://github.com/unclexo/test-laravel-app/commit/b938a750deb49e954b36b30590a3e07f04dde9f9#diff-01c9b5c8d18a1e363a9856e23a7085909ca74d37cacdffd63d7c2562c7ad5a0cR101)
 
 ### Testing File Upload
+
 ##### How to
+
 - [Test a simple image upload](https://github.com/unclexo/test-laravel-app/commit/e08dbd08777ffda7969caa57936e36f36f1f9849)
 - [Test renaming an uploaded image](https://github.com/unclexo/test-laravel-app/commit/adde09542d199625baa10ce3879e4b904efb0fda#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR30)
 - [Test validating an uploaded image](https://github.com/unclexo/test-laravel-app/commit/05286dd6301039fa5e3a5bebd25154d6454b2868#diff-50c5279f0b565ef1db22b63db589247302e4d1251fe51cb60401ab497939b9ceR49)
@@ -56,12 +114,14 @@ If it does not work try to fake a list of tasks. Even if this one does not work 
 
 
 ### Testing Sending Email
+
 #### What to test?
 
 What to test while sending an email? Well, you don't need to test how to send emails under the hood. Because that's the 
 job of Laravel email API, not yours. So, test Laravel's email API can be instructed to send emails.
 
-#### How to
+##### How to
+
 - [Test mailables are available](https://github.com/unclexo/test-laravel-app/commit/fecdf9d594ee690ffd84c07454043cd5e2a440eb#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR15)
 - [Test previewing email template](https://github.com/unclexo/test-laravel-app/commit/13e5edd7064353cdb8236f9373b184838efb4f93#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR33)
 - [Test mailable has valid content](https://github.com/unclexo/test-laravel-app/commit/9693f2c6e2922838b58a4e524342d47008e626f9#diff-02065eb58905bf99b4529ca7a41cd828b4788e3a96377e1d687351e6a7b0715bR44)
@@ -74,13 +134,15 @@ job of Laravel email API, not yours. So, test Laravel's email API can be instruc
 
 
 ### Testing Events and Listeners
+
 #### What to test?
 
 Test the code that triggers an event to check it was dispatched. You don't need to test the execution of 
 a listener. That's Laravel's event API's job. You may unit-test what the listener's `handle()` method does and 
 mock the method's call.
 
-#### How to
+##### How to
+
 - [Test listeners can listen to given events](https://github.com/unclexo/test-laravel-app/commit/a889a512c66f2c5bc43f601577a193f97568249e#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R19)
 - [Test triggering an event after creating orders](https://github.com/unclexo/test-laravel-app/commit/0c51d73e2ba892b5da5afa7c95556715777694ec#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R43)
 - [Test triggering an event after updating orders](https://github.com/unclexo/test-laravel-app/commit/f684622b6cc100c0620b29bf3972ee52664336ee#diff-0487aa68cfc42ba8667af5853cb997ada682c50774fb9e634370102518e29b92R62)
@@ -93,12 +155,14 @@ mock the method's call.
 
 
 ### Testing Notifications
+
 #### What to test?
 
 Test Laravel notification API can be instructed to send notifications. Because sending notifications is unrelated to 
 the code you are actually testing.
 
-#### How to
+##### How to
+
 - [Test notifying users after shipping orders](https://github.com/unclexo/test-laravel-app/commit/5c9418d0d01bc823315e567d442096414313b199#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR20)
 - [Test notifying user while requesting reset password link](https://github.com/unclexo/test-laravel-app/commit/7e26369343e5517daf8fd9cff3910f61e29af50e#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR37)
 - [Test reset password screen can be seen with token](https://github.com/unclexo/test-laravel-app/commit/2ce0701ffdb404d02fb46ae084a21dfd1709de7d#diff-669bf523012cdae2c3873beab01ab7ed24936518e43c2fcbff2406dbe551b6ddR51)
@@ -107,6 +171,7 @@ the code you are actually testing.
 
 
 ### Testing Jobs / Queue 
+
 #### Test-Driven Development with a real world example 
 
 This section is for how to upload, resize, and store image info into a database but via a **queued** job and 
