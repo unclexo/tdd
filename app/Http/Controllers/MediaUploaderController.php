@@ -7,7 +7,7 @@ use App\Jobs\ImageUploadAndResizingJob;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Laravel\Facades\Image;
 
 class MediaUploaderController extends Controller
 {
@@ -68,7 +68,7 @@ class MediaUploaderController extends Controller
 
         $path = \request()->file('image')->storeAs('resize', $newImageName, 'public');
 
-        Image::make(Storage::disk('public')->path($path))->resize(300, 200)->save();
+        Image::read(Storage::disk('public')->path($path))->resize(300, 200)->save();
 
         return ['path' => $path];
     }
