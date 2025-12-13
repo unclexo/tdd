@@ -12,7 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ImageUploadAndResizingJob implements ShouldQueue
 {
@@ -71,21 +71,26 @@ class ImageUploadAndResizingJob implements ShouldQueue
         $paths = ['original' => $imageName, 'resized' => []];
 
         foreach ($this->resolutions as $key => $resolution) {
-            $image = Image::make($absolutePath = $this->storage()->path($imageName))
+            $absoluteFilePath = $this->storage()->path($imageName);
+            $absoluteFilePathWithResolutionKey = $this->absolutePathWithResolutionKey($absoluteFilePath, $key);
+
+            Image::read($absoluteFilePath)
                 ->resize($resolution[0], $resolution[1])
-                ->save($this->absolutePathWithResolutionKey($absolutePath, $key));
+                ->save($this->absolutePathWithResolutionKey($absoluteFilePath, $key));
+
+            $basename = basename($absoluteFilePathWithResolutionKey);
 
             // Save image info into database
-            Media::create([
+            $media = Media::create([
                 'user_id' => $this->data['user_id'] ?? null,
-                'name' => $image->basename,
+                'name' => $basename,
                 'resolution' => json_encode($resolution),
                 'disk' => $this->data['disk'] ?? 'public',
                 'type' => $this->data['type'] ?? null,
                 'model' => $this->data['model'] ?? null,
             ]);
 
-            $paths['resized'][] = $image->basename;
+            $paths['resized'][] = $basename;
         }
 
         $this->storage()->delete($imageName);
