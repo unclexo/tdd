@@ -33,7 +33,7 @@ Follow these steps to set up the application.
 #### 1. Build Docker Image
 
 ```bash
-docker compose build --build-arg USER=$(whoami) --build-arg UID=$(id -u) --build-arg GID=$(id -g)
+docker compose build --build-arg APP_USER=$(whoami) --build-arg APP_UID=$(id -u) --build-arg APP_GID=$(id -g)
 ```
 
 #### 2. Start Containers
@@ -68,10 +68,14 @@ Then generate the application key:
 docker exec -it tdd-php php artisan key:generate
 ```
 
-#### 6. Install and Build Frontend
+#### 6. Install Frontend
 
 ```bash
 yarn install && yarn build
+
+// or
+
+npm install && npm run build
 ```
 
 #### 7. Run Tests
